@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+:root {
+  --cream: #F9F5EF;
+  --cream-dark: #F0E9DC;
+  --brown: #3D2B1F;
+  --brown-mid: #6B4226;
+  --brown-light: #A0714F;
+  --terracotta: #C4572A;
+  --terracotta-light: #E07B50;
+  --gold: #B8892A;
+  --gold-light: #D4A843;
+  --green: #4A6741;
+  --text-primary: #2A1A0E;
+  --text-secondary: #6B4226;
+  --text-muted: #9A7B65;
+  --border: #DDD0BF;
+  --white: #FFFFFF;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Jost', sans-serif;
+  --nav-height: 64px;
+  --transition: all 0.25s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--brown);
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.4rem); }
+h3 { font-size: clamp(1.2rem, 2vw, 1.7rem); }
+
+a { color: inherit; text-decoration: none; transition: var(--transition); }
+img { max-width: 100%; height: auto; display: block; }
+button { cursor: pointer; font-family: var(--font-body); border: none; }
+input, select, textarea { font-family: var(--font-body); }
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: var(--brown);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border: 1px solid var(--brown);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: var(--terracotta);
+  border-color: var(--terracotta);
+  color: var(--white);
+}
+
+.btn-outline {
+  display: inline-block;
+  background: transparent;
+  color: var(--brown);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 13px 32px;
+  border: 1px solid var(--brown);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.btn-outline:hover {
+  background: var(--brown);
+  color: var(--cream);
+}
+
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #25D366;
+  color: white;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 16px 32px;
+  border: none;
+  transition: var(--transition);
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+}
+.btn-whatsapp:hover { background: #1da851; }
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.divider {
+  width: 48px;
+  height: 1px;
+  background: var(--gold);
+  margin: 16px 0 32px;
+}
+.divider.center { margin: 16px auto 32px; }
+
+/* Announcement bar */
+.announcement-bar {
+  background: var(--brown);
+  color: var(--cream);
+  text-align: center;
+  padding: 10px 24px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.announcement-bar a { color: var(--gold-light); text-decoration: underline; }
+
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--brown);
+  color: var(--cream);
+  padding: 14px 28px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  z-index: 9999;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* Page fade in */
+.page-content { animation: fadeUp 0.5s ease both; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Auth state elements */
+.show-when-logged-in { display: none; }
+.show-when-logged-out { display: block; }
+body.user-logged-in .show-when-logged-in { display: block; }
+body.user-logged-in .show-when-logged-out { display: none; }
+
+/* Responsive utils */
+@media (max-width: 768px) {
+  .container { padding: 0 16px; }
+  .hide-mobile { display: none !important; }
+}
+@media (min-width: 769px) {
+  .hide-desktop { display: none !important; }
+}

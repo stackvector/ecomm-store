@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Avinya's Store</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <style>
+    .about-hero {
+      background: var(--brown);
+      padding: 80px 0;
+      text-align: center;
+    }
+    .about-hero h1 { color: var(--cream); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; }
+    .about-hero h1 em { color: var(--gold-light); font-style: italic; }
+    .about-hero p { color: rgba(249,245,239,0.65); font-size: 16px; max-width: 520px; margin: 16px auto 0; line-height: 1.7; }
+
+    .story-section { padding: 80px 0; }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .story-img {
+      aspect-ratio: 4/5;
+      background: var(--cream-dark);
+      overflow: hidden;
+    }
+    .story-img img { width: 100%; height: 100%; object-fit: cover; }
+    .story-text h2 { margin-bottom: 8px; }
+    .story-text p { font-size: 15px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+    .story-text .divider { margin: 16px 0 28px; }
+
+    .values-section {
+      background: var(--cream-dark);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 0;
+    }
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 40px;
+    }
+    .value-card {
+      padding: 28px;
+      background: var(--white);
+      border: 1px solid var(--border);
+    }
+    .value-icon { font-size: 24px; margin-bottom: 12px; color: var(--terracotta); }
+    .value-card h3 { font-size: 20px; color: var(--brown); margin-bottom: 8px; }
+    .value-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+    /* Contact & Info */
+    .info-section { padding: 80px 0; }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+    .info-block h3 { font-size: 22px; color: var(--brown); margin-bottom: 16px; }
+    .info-block p, .info-block li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .info-block ul { list-style: none; }
+    .info-block ul li { padding: 6px 0; border-bottom: 1px solid var(--border); }
+    .info-block ul li:last-child { border-bottom: none; }
+    .contact-links { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      font-size: 14px;
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+    .contact-link:hover { border-color: var(--brown); background: var(--cream-dark); }
+    .contact-link svg { color: var(--terracotta); flex-shrink: 0; }
+
+    @media (max-width: 768px) {
+      .story-grid { grid-template-columns: 1fr; gap: 32px; }
+      .values-grid { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-content">
+
+  <div class="about-hero">
+    <div class="container">
+      <h1>Made with <em>love</em>,<br/>sold with purpose</h1>
+      <p>Avinya's Store was born from a simple idea — to bring authentic, handmade Indian art directly to people who appreciate it.</p>
+    </div>
+  </div>
+
+  <!-- Story -->
+  <section class="story-section">
+    <div class="container">
+      <div class="story-grid">
+        <div class="story-img">
+          <img src="https://placehold.co/600x750/DDD0BF/3D2B1F?text=Artisan+at+work" alt="Artisan painting" loading="lazy" />
+        </div>
+        <div class="story-text">
+          <span class="section-label">Our story</span>
+          <h2>Art from the heart of Bihar</h2>
+          <div class="divider"></div>
+          <p>Madhubani art has been passed down through generations of women in the Mithila region of Bihar. What began as wall paintings to celebrate festivals and life events has grown into a vibrant artistic tradition recognised worldwide.</p>
+          <p>At Avinya's Store, we work directly with these artists — no middlemen, no mass production. Every painting, every saree, every piece of home décor you see is made by hand using natural pigments and techniques that have not changed in centuries.</p>
+          <p>When you buy from us, you're not just buying a product. You're supporting a family, preserving a tradition, and bringing a piece of Bihar's soul into your home.</p>
+          <a href="shop.html" class="btn-primary">Shop the Collection</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="values-section">
+    <div class="container">
+      <span class="section-label">What we stand for</span>
+      <h2>Our values</h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">✦</div>
+          <h3>100% Handmade</h3>
+          <p>Every item in our store is created by hand. We don't stock machine-made replicas or printed imitations.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">◈</div>
+          <h3>Direct from Artists</h3>
+          <p>We work directly with artisans, ensuring fair pay and long-term partnerships that sustain traditional crafts.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">◇</div>
+          <h3>Natural Materials</h3>
+          <p>Our paintings use natural earth pigments. Sarees are woven from natural fibres — cotton, silk, tussar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact + Shipping info -->
+  <section class="info-section" id="contact">
+    <div class="container">
+      <div class="info-grid">
+        <div class="info-block" id="contact">
+          <h3>Get in touch</h3>
+          <p>All orders are placed and confirmed via WhatsApp. We're happy to help with custom orders, bulk requests, or any questions.</p>
+          <div class="contact-links">
+            <a href="https://wa.me/919999999999" class="contact-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              WhatsApp us — +91 99999 99999 (placeholder)
+            </a>
+            <a href="mailto:hello@kalabazaar.in" class="contact-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+              hello@kalabazaar.in
+            </a>
+            <a href="https://instagram.com" class="contact-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+              @kalabazaar on Instagram
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="info-block" id="shipping" style="margin-bottom:40px">
+            <h3>Shipping</h3>
+            <ul>
+              <li>Ships within <strong>3–5 business days</strong> of order confirmation</li>
+              <li>Free shipping on orders above <strong>₹2,000</strong></li>
+              <li>Standard shipping: <strong>₹120–180</strong> depending on location</li>
+              <li>All orders are carefully packed to protect artwork</li>
+              <li>Tracking number shared on WhatsApp</li>
+            </ul>
+          </div>
+
+          <div class="info-block" id="returns">
+            <h3>Returns</h3>
+            <ul>
+              <li><strong>7 days</strong> return window from delivery date</li>
+              <li>Accepted for damaged or incorrect items only</li>
+              <li>Contact us on WhatsApp with photos</li>
+              <li>Refund processed within <strong>5–7 business days</strong></li>
+              <li>Custom or personalised orders cannot be returned</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script type="module">
+  import { injectLayout } from './js/layout.js';
+  import { initAuth, initLoginModal } from './js/auth.js';
+  import { initCartSidebar } from './js/cart.js';
+
+  injectLayout();
+  initCartSidebar();
+  initAuth();
+  initLoginModal();
+</script>
+</body>
+</html>

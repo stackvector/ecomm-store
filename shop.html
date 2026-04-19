@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop — Avinya's Store</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <style>
+    .shop-layout {
+      padding: 48px 0 80px;
+    }
+    .shop-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .shop-count {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .shop-sort {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .shop-sort select {
+      border: 1px solid var(--border);
+      background: var(--white);
+      padding: 8px 12px;
+      font-size: 12px;
+      font-family: var(--font-body);
+      color: var(--text-primary);
+      outline: none;
+      cursor: pointer;
+    }
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 24px;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-size: 22px;
+    }
+    .no-results small { display: block; font-family: var(--font-body); font-size: 14px; margin-top: 8px; }
+    .product-skeleton {
+      background: var(--cream-dark);
+      aspect-ratio: 3/4;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  </style>
+</head>
+<body>
+<div class="page-content">
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="section-label">Avinya's Store</span>
+      <h1 id="shop-heading">All Products</h1>
+      <p id="shop-subheading">Handcrafted with love in Bihar</p>
+    </div>
+  </div>
+
+  <div class="shop-layout">
+    <div class="container">
+      <!-- Category filters -->
+      <div class="category-filters" id="category-filters">
+        <button class="filter-pill active" data-cat="all">All</button>
+        <button class="filter-pill" data-cat="paintings">Paintings</button>
+        <button class="filter-pill" data-cat="sarees">Sarees</button>
+        <button class="filter-pill" data-cat="clothing">Clothing</button>
+        <button class="filter-pill" data-cat="home-decor">Home Decor</button>
+        <button class="filter-pill" data-cat="handicrafts">Handicrafts</button>
+      </div>
+
+      <div class="shop-top">
+        <span class="shop-count" id="product-count">Loading...</span>
+        <div class="shop-sort">
+          Sort by
+          <select id="sort-select">
+            <option value="default">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name A–Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Products grid -->
+      <div class="products-grid" id="products-grid">
+        <!-- Skeleton loaders -->
+        <div class="product-skeleton"></div>
+        <div class="product-skeleton"></div>
+        <div class="product-skeleton"></div>
+        <div class="product-skeleton"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+  import { injectLayout } from './js/layout.js';
+  import { initAuth, initLoginModal } from './js/auth.js';
+  import { initCartSidebar, Cart } from './js/cart.js';
+  import { getProducts, CATEGORIES, renderProductCard } from './js/products.js';
+
+  injectLayout();
+  initCartSidebar();
+  initAuth();
+  initLoginModal();
+
+  const grid    = document.getElementById('products-grid');
+  const countEl = document.getElementById('product-count');
+  const sortEl  = document.getElementById('sort-select');
+  const heading = document.getElementById('shop-heading');
+  const subhead = document.getElementById('shop-subheading');
+
+  let allProducts = [];
+  let activeCategory = 'all';
+
+  // Read URL params
+  const params = new URLSearchParams(location.search);
+  const urlCat = params.get('cat');
+  if (urlCat) activeCategory = urlCat;
+
+  // Set active filter pill
+  document.querySelectorAll('.filter-pill').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.cat === activeCategory);
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.cat;
+      document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProducts();
+      // Update URL without reload
+      const u = new URL(location.href);
+      if (activeCategory === 'all') u.searchParams.delete('cat');
+      else u.searchParams.set('cat', activeCategory);
+      history.replaceState({}, '', u);
+    });
+  });
+
+  sortEl.addEventListener('change', renderProducts);
+
+  function sortProducts(items) {
+    const v = sortEl.value;
+    const arr = [...items];
+    if (v === 'price-asc')  return arr.sort((a, b) => a.price - b.price);
+    if (v === 'price-desc') return arr.sort((a, b) => b.price - a.price);
+    if (v === 'name-asc')   return arr.sort((a, b) => a.name.localeCompare(b.name));
+    return arr;
+  }
+
+  function renderProducts() {
+    let items = allProducts;
+    if (activeCategory !== 'all') items = items.filter(p => p.category === activeCategory);
+    items = sortProducts(items);
+
+    // Update heading
+    const cat = CATEGORIES.find(c => c.id === activeCategory);
+    heading.textContent  = cat ? cat.label : 'All Products';
+    subhead.textContent  = `${items.length} product${items.length !== 1 ? 's' : ''} available`;
+    countEl.textContent  = `${items.length} product${items.length !== 1 ? 's' : ''}`;
+
+    grid.innerHTML = '';
+    if (items.length === 0) {
+      grid.innerHTML = `<div class="no-results">No products found<small>Try a different category</small></div>`;
+      return;
+    }
+    items.forEach(p => grid.appendChild(renderProductCard(p, product => Cart.addItem(product))));
+  }
+
+  // Load products
+  getProducts().then(products => {
+    allProducts = products;
+    renderProducts();
+  });
+
+  // Active nav
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    if (a.getAttribute('href')?.startsWith('shop')) a.classList.add('active');
+  });
+</script>
+</body>
+</html>

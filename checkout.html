@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Avinya's Store</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <style>
+    .checkout-page { padding: 48px 0 80px; }
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 48px;
+      align-items: start;
+    }
+    /* Form */
+    .checkout-form-col h2 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--brown);
+      margin-bottom: 28px;
+    }
+    .form-section-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 16px 0 10px;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+    .form-section-title:first-of-type { border-top: none; padding-top: 0; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition);
+      font-family: var(--font-body);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--brown); }
+    .form-group input.error { border-color: var(--terracotta); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group input::placeholder { color: var(--text-muted); }
+
+    /* Order summary */
+    .order-summary {
+      background: var(--cream-dark);
+      border: 1px solid var(--border);
+      padding: 28px;
+      position: sticky;
+      top: calc(var(--nav-height) + 24px);
+    }
+    .order-summary h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--brown);
+      margin-bottom: 20px;
+    }
+    .summary-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-item:last-of-type { border-bottom: none; }
+    .summary-item img {
+      width: 56px;
+      height: 70px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--cream);
+    }
+    .summary-item-info { flex: 1; }
+    .summary-item-name { font-size: 14px; color: var(--brown); line-height: 1.3; margin-bottom: 2px; }
+    .summary-variant { font-size: 11px; color: var(--text-muted); }
+    .summary-item-qty { font-size: 12px; color: var(--text-muted); }
+    .summary-item-price { font-size: 14px; font-weight: 500; color: var(--text-primary); flex-shrink: 0; }
+
+    .summary-totals { margin-top: 16px; }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 6px 0;
+    }
+    .summary-row.total {
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+      padding-top: 14px;
+      font-size: 18px;
+      color: var(--brown);
+      font-family: var(--font-display);
+    }
+    .summary-row.total span:last-child { font-weight: 500; }
+
+    .whatsapp-note {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      display: flex;
+      gap: 8px;
+    }
+    .whatsapp-note svg { flex-shrink: 0; margin-top: 2px; }
+
+    .login-prompt {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .login-prompt a { color: var(--brown); text-decoration: underline; cursor: pointer; }
+    .login-prompt.show-when-logged-in { display: none; }
+    body.user-logged-in .login-prompt.show-when-logged-out { display: none; }
+    body.user-logged-in .login-prompt.show-when-logged-in { display: flex; }
+
+    @media (max-width: 900px) {
+      .checkout-layout { grid-template-columns: 1fr; }
+      .order-summary { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-content">
+
+  <div class="page-hero" style="padding:32px 0">
+    <div class="container">
+      <span class="section-label">Avinya's Store</span>
+      <h1 style="font-size:2rem">Checkout</h1>
+    </div>
+  </div>
+
+  <div class="checkout-page">
+    <div class="container">
+      <div class="checkout-layout">
+
+        <!-- Left: Form -->
+        <div class="checkout-form-col">
+          <!-- Login prompt -->
+          <div class="login-prompt show-when-logged-out">
+            Already have an account? <a data-open-login>Sign in</a> to save your order history.
+          </div>
+          <div class="login-prompt show-when-logged-in" style="display:none">
+            <span>Signed in as <strong class="user-display-name"></strong></span>
+          </div>
+
+          <h2>Your details</h2>
+
+          <form id="checkout-form">
+            <div class="form-section-title">Contact Information</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="name" required placeholder="Priya Sharma" autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label>WhatsApp / Phone *</label>
+                <input type="tel" name="phone" required placeholder="9810XXXXXX" autocomplete="tel" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email (optional)</label>
+              <input type="email" name="email" placeholder="you@email.com" autocomplete="email" />
+            </div>
+
+            <div class="form-section-title">Delivery Address</div>
+            <div class="form-group">
+              <label>Address Line 1 *</label>
+              <input type="text" name="address" required placeholder="House / Flat, Street" autocomplete="address-line1" />
+            </div>
+            <div class="form-group">
+              <label>Area / Landmark</label>
+              <input type="text" name="area" placeholder="Nearby landmark (optional)" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>City *</label>
+                <input type="text" name="city" required placeholder="New Delhi" autocomplete="address-level2" />
+              </div>
+              <div class="form-group">
+                <label>State *</label>
+                <input type="text" name="state" required placeholder="Delhi" autocomplete="address-level1" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>PIN Code *</label>
+                <input type="text" name="pincode" required placeholder="110001" pattern="[0-9]{6}" />
+              </div>
+              <div class="form-group">
+                <label>Country</label>
+                <input type="text" name="country" value="India" readonly style="background:var(--cream-dark);color:var(--text-muted)" />
+              </div>
+            </div>
+
+            <div class="form-section-title">Order Notes</div>
+            <div class="form-group">
+              <label>Special instructions (optional)</label>
+              <textarea name="note" placeholder="E.g. gift wrapping, specific colours, delivery timing..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-whatsapp" id="checkout-submit" style="margin-top:8px">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              Place Order on WhatsApp
+            </button>
+
+            <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.6">
+              Clicking above opens WhatsApp with your full order. We'll confirm your order and share payment details there.
+            </p>
+          </form>
+        </div>
+
+        <!-- Right: Order summary -->
+        <div>
+          <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div id="order-summary-items">
+              <!-- Filled by JS -->
+            </div>
+            <div class="summary-totals">
+              <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="order-summary-subtotal">₹0</span>
+              </div>
+              <div class="summary-row">
+                <span>Shipping</span>
+                <span id="order-summary-shipping">Calculated on WhatsApp</span>
+              </div>
+              <div class="summary-row total">
+                <span>Total</span>
+                <span id="order-summary-total">₹0</span>
+              </div>
+            </div>
+            <div class="whatsapp-note">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              Orders are confirmed via WhatsApp. Payment via UPI, bank transfer, or cash on delivery.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { injectLayout } from './js/layout.js';
+  import { initAuth, initLoginModal } from './js/auth.js';
+  import { initCartSidebar } from './js/cart.js';
+  import { initCheckout } from './js/checkout.js';
+
+  injectLayout();
+  initCartSidebar();
+  initAuth();
+  initLoginModal();
+  initCheckout();
+
+  // Mirror subtotal to both total fields
+  const obs = new MutationObserver(() => {
+    const sub = document.getElementById('order-summary-total')?.textContent;
+    const subtotalEl = document.getElementById('order-summary-subtotal');
+    if (subtotalEl && sub) subtotalEl.textContent = sub;
+  });
+  const totalEl = document.getElementById('order-summary-total');
+  if (totalEl) obs.observe(totalEl, { childList: true, characterData: true, subtree: true });
+</script>
+</body>
+</html>

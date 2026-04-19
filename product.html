@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product — Avinya's Store</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <style>
+    .product-page { padding: 48px 0 80px; }
+    .product-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    /* Gallery */
+    .product-gallery { position: sticky; top: calc(var(--nav-height) + 24px); }
+    .product-main-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      background: var(--cream-dark);
+      display: block;
+    }
+    .product-thumb-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .product-thumb {
+      width: 72px;
+      height: 90px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition);
+    }
+    .product-thumb.active { border-color: var(--brown); }
+    .product-thumb:hover { border-color: var(--brown-light); }
+
+    /* Info */
+    .product-info-col {}
+    .product-category-link {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .product-category-link:hover { color: var(--terracotta); }
+    .product-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 400;
+      color: var(--brown);
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+    .product-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .product-price {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--brown);
+    }
+    .product-original-price {
+      font-size: 16px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .product-badge-row { margin-bottom: 24px; }
+    .product-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    /* Variants */
+    .variant-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .variant-label span { color: var(--brown); font-weight: 400; font-size: 13px; letter-spacing: 0; text-transform: none; }
+    .variant-options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+    .variant-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      font-size: 13px;
+      font-family: var(--font-body);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .variant-btn:hover { border-color: var(--brown-light); }
+    .variant-btn.active { border-color: var(--brown); background: var(--brown); color: var(--cream); }
+
+    /* Qty */
+    .qty-row { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .qty-row label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); }
+    .qty-control { display: flex; align-items: center; border: 1px solid var(--border); }
+    .qty-control .qty-btn { width: 40px; height: 40px; background: none; border: none; font-size: 18px; cursor: pointer; color: var(--brown); display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+    .qty-control .qty-btn:hover { background: var(--cream-dark); }
+    .qty-control .qty-display { width: 40px; text-align: center; font-size: 15px; font-weight: 500; }
+
+    /* Add to cart */
+    .add-to-cart-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--brown);
+      color: var(--cream);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 12px;
+    }
+    .add-to-cart-btn:hover { background: var(--terracotta); }
+
+    /* Details accordion */
+    .details-section { margin-top: 32px; }
+    .detail-toggle {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-top: 1px solid var(--border);
+      background: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+    }
+    .detail-toggle:last-of-type { border-bottom: 1px solid var(--border); }
+    .detail-body {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      padding: 0 0 16px;
+      display: none;
+    }
+    .detail-body.open { display: block; }
+
+    /* Related */
+    .related-section { padding: 64px 0; border-top: 1px solid var(--border); }
+
+    @media (max-width: 900px) {
+      .product-layout { grid-template-columns: 1fr; gap: 32px; }
+      .product-gallery { position: static; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-content">
+  <div class="product-page">
+    <div class="container">
+      <div class="breadcrumb" id="breadcrumb">
+        <a href="index.html">Home</a><span>/</span>
+        <a href="shop.html">Shop</a><span>/</span>
+        <span id="breadcrumb-name">Loading...</span>
+      </div>
+
+      <div class="product-layout" id="product-layout">
+        <!-- Filled by JS -->
+        <div class="product-skeleton" style="aspect-ratio:3/4"></div>
+        <div>
+          <div class="product-skeleton" style="height:2rem;margin-bottom:12px;width:60%"></div>
+          <div class="product-skeleton" style="height:1rem;margin-bottom:8px;width:40%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="related-section">
+    <div class="container">
+      <span class="section-label">You may also like</span>
+      <h2>More from the studio</h2>
+      <div class="divider"></div>
+      <div class="products-grid" id="related-grid"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { injectLayout } from './js/layout.js';
+  import { initAuth, initLoginModal } from './js/auth.js';
+  import { initCartSidebar, Cart } from './js/cart.js';
+  import { getProductById, getProducts, CATEGORIES, renderProductCard, formatPrice } from './js/products.js';
+
+  injectLayout();
+  initCartSidebar();
+  initAuth();
+  initLoginModal();
+
+  const id = new URLSearchParams(location.search).get('id');
+  if (!id) { window.location.href = 'shop.html'; }
+
+  let selectedVariant = null;
+  let qty = 1;
+
+  const layout = document.getElementById('product-layout');
+
+  getProductById(id).then(product => {
+    if (!product) { window.location.href = 'shop.html'; return; }
+
+    document.title = `${product.name} — Avinya's Store`;
+    document.getElementById('breadcrumb-name').textContent = product.name;
+
+    const catLabel = CATEGORIES.find(c => c.id === product.category)?.label || product.category;
+
+    layout.innerHTML = `
+      <div class="product-gallery">
+        <img class="product-main-img" id="main-img" src="${product.images[0]}" alt="${product.name}" />
+        ${product.images.length > 1 ? `
+        <div class="product-thumb-row">
+          ${product.images.map((img, i) => `<img class="product-thumb ${i===0?'active':''}" src="${img}" alt="${product.name} ${i+1}" data-index="${i}" />`).join('')}
+        </div>` : ''}
+      </div>
+
+      <div class="product-info-col">
+        <a href="shop.html?cat=${product.category}" class="product-category-link">${catLabel}</a>
+        <h1 class="product-title">${product.name}</h1>
+        <div class="product-price-row">
+          <div class="product-price">${formatPrice(product.price)}</div>
+          ${product.originalPrice ? `<div class="product-original-price">${formatPrice(product.originalPrice)}</div>` : ''}
+        </div>
+        ${product.badge ? `<div class="product-badge-row"><span class="product-card-badge" style="position:static;display:inline-block">${product.badge}</span></div>` : ''}
+
+        <hr class="product-divider" />
+        <p style="font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:24px">${product.description}</p>
+
+        ${product.variants.length > 0 ? `
+        <div>
+          <div class="variant-label">Option <span id="selected-variant-label"></span></div>
+          <div class="variant-options">
+            ${product.variants.map(v => `<button class="variant-btn" data-variant="${v}">${v}</button>`).join('')}
+          </div>
+        </div>` : ''}
+
+        <div class="qty-row">
+          <label>Qty</label>
+          <div class="qty-control">
+            <button class="qty-btn" id="qty-dec">−</button>
+            <span class="qty-display" id="qty-display">1</span>
+            <button class="qty-btn" id="qty-inc">+</button>
+          </div>
+        </div>
+
+        <button class="add-to-cart-btn" id="add-to-cart-btn">Add to Cart</button>
+        <button class="btn-whatsapp" id="buy-now-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Buy Now via WhatsApp
+        </button>
+
+        <div class="details-section">
+          <button class="detail-toggle" data-target="care">Care Instructions <span>+</span></button>
+          <div class="detail-body" id="care">Hand wash in cold water. Do not wring. Dry in shade. Iron on reverse side.</div>
+
+          <button class="detail-toggle" data-target="shipping">Shipping <span>+</span></button>
+          <div class="detail-body" id="shipping">Ships within 3–5 business days. Free shipping on orders above ₹2,000. Carefully packed to ensure safe delivery of your artwork.</div>
+
+          <button class="detail-toggle" data-target="returns">Returns <span>+</span></button>
+          <div class="detail-body" id="returns">We accept returns within 7 days of delivery for damaged items. Contact us on WhatsApp with photos of the issue.</div>
+        </div>
+      </div>
+    `;
+
+    // Thumb clicks
+    layout.querySelectorAll('.product-thumb').forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        document.getElementById('main-img').src = product.images[thumb.dataset.index];
+        layout.querySelectorAll('.product-thumb').forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+      });
+    });
+
+    // Variant selection
+    layout.querySelectorAll('.variant-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        layout.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedVariant = btn.dataset.variant;
+        const lbl = document.getElementById('selected-variant-label');
+        if (lbl) lbl.textContent = `— ${selectedVariant}`;
+      });
+    });
+    // Auto-select first variant
+    const firstVariantBtn = layout.querySelector('.variant-btn');
+    if (firstVariantBtn) firstVariantBtn.click();
+
+    // Qty controls
+    document.getElementById('qty-dec')?.addEventListener('click', () => {
+      if (qty > 1) { qty--; document.getElementById('qty-display').textContent = qty; }
+    });
+    document.getElementById('qty-inc')?.addEventListener('click', () => {
+      qty++; document.getElementById('qty-display').textContent = qty;
+    });
+
+    // Add to cart
+    document.getElementById('add-to-cart-btn')?.addEventListener('click', () => {
+      if (product.variants.length > 0 && !selectedVariant) {
+        alert('Please select an option first.');
+        return;
+      }
+      Cart.addItem(product, selectedVariant, qty);
+      // Open cart
+      document.getElementById('cart-sidebar')?.classList.add('open');
+      document.getElementById('cart-overlay')?.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // Buy now
+    document.getElementById('buy-now-btn')?.addEventListener('click', () => {
+      if (product.variants.length > 0 && !selectedVariant) { alert('Please select an option.'); return; }
+      Cart.addItem(product, selectedVariant, qty).then(() => { window.location.href = 'checkout.html'; });
+    });
+
+    // Accordion
+    layout.querySelectorAll('.detail-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const body = document.getElementById(btn.dataset.target);
+        const isOpen = body.classList.toggle('open');
+        btn.querySelector('span').textContent = isOpen ? '−' : '+';
+      });
+    });
+  });
+
+  // Related products
+  getProducts().then(products => {
+    getProductById(id).then(product => {
+      if (!product) return;
+      const related = products.filter(p => p.id !== id && p.category === product.category).slice(0, 4);
+      const grid = document.getElementById('related-grid');
+      if (grid) related.forEach(p => grid.appendChild(renderProductCard(p, prod => Cart.addItem(prod))));
+    });
+  });
+</script>
+</body>
+</html>
