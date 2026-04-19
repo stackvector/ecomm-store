@@ -16,7 +16,7 @@ export function injectLayout() {
   nav.className = "navbar";
   nav.innerHTML = `
     <div class="navbar-inner">
-      <a href="index.html" class="nav-logo">Avinya's <span>Store</span></a>
+      <a href="index.html" class="nav-logo">ecomm-<span>site</span></a>
 
       <ul class="nav-links hide-mobile">
         <li class="nav-dropdown">
@@ -187,7 +187,7 @@ export function injectLayout() {
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="nav-logo">Avinya's <span>Store</span></div>
+          <div class="nav-logo">ecomm-<span>site</span></div>
           <p>Handcrafted art and textiles from Bihar. Every piece tells a story of tradition, skill, and love.</p>
         </div>
         <div class="footer-col">
@@ -213,7 +213,7 @@ export function injectLayout() {
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2025 Avinya's Store. All rights reserved.</span>
+        <span>© 2025 ecomm-site. All rights reserved.</span>
         <div class="footer-social">
           <a href="#">IG</a>
           <a href="#">FB</a>

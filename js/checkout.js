@@ -50,7 +50,7 @@ export function initCheckout() {
 
 function buildMessage({ name, phone, address, pin, note, items, total }) {
   const lines = [
-    "🛍️ *New Order — Avinya's Store*",
+    "🛍️ *New Order — ecomm-site*",
     "─────────────────",
     `👤 *Name:* ${name}`,
     `📞 *Phone:* ${phone}`,

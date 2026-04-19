@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product — Avinya's Store</title>
+  <title>Product — ecomm-site</title>
   <link rel="stylesheet" href="css/main.css" />
   <link rel="stylesheet" href="css/components.css" />
   <style>
@@ -223,7 +223,7 @@
   getProductById(id).then(product => {
     if (!product) { window.location.href = 'shop.html'; return; }
 
-    document.title = `${product.name} — Avinya's Store`;
+    document.title = `${product.name} — ecomm-site`;
     document.getElementById('breadcrumb-name').textContent = product.name;
 
     const catLabel = CATEGORIES.find(c => c.id === product.category)?.label || product.category;
